@@ -1,135 +1,109 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BARBER | آرایشگاه مردانه</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0b0b">
+  <title>BARBER | آرایشگاه مردانه</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<header>
-    <div class="logo">BARBER.</div>
-
-    <nav>
-        <a href="#home">صفحه اصلی</a>
-        <a href="#services">خدمات</a>
-        <a href="#booking">رزرو نوبت</a>
-        <a href="#about">درباره ما</a>
-    </nav>
+<header class="navbar">
+  <a href="#" class="logo">BARBER<span>.</span></a>
+  <nav>
+    <a href="#home">خانه</a>
+    <a href="#services">خدمات</a>
+    <a href="#booking">رزرو نوبت</a>
+  </nav>
+  <a href="#booking" class="nav-btn">رزرو آنلاین</a>
 </header>
 
 <section class="hero" id="home">
-
-    <div class="hero-content">
-        <h1>استایل تو،<br>امضای توست.</h1>
-
-        <p>
-            تجربه یک اصلاح حرفه‌ای و متفاوت
-            در آرایشگاه مردانه ما
-        </p>
-
-        <a href="#booking" class="btn">
-            رزرو نوبت آنلاین
-        </a>
-    </div>
-
+  <div class="hero-content">
+    <span class="eyebrow">PREMIUM BARBERSHOP</span>
+    <h1>استایل تو،<br><span>امضای توئه.</span></h1>
+    <p>تجربه‌ای متفاوت از آراستگی و جذابیت مردانه</p>
+    <a href="#booking" class="gold-btn">رزرو نوبت</a>
+  </div>
 </section>
 
 <section class="services" id="services">
-
+  <div class="section-title">
+    <span>خدمات حرفه‌ای</span>
     <h2>خدمات ما</h2>
+  </div>
 
-    <div class="service-container">
-
-        <div class="service">
-            <h3>کوتاهی مو</h3>
-            <p>اصلاح و فرم‌دهی حرفه‌ای</p>
-            <span>۳۰ دقیقه</span>
-        </div>
-
-        <div class="service">
-            <h3>اصلاح ریش</h3>
-            <p>مرتب‌سازی و فرم‌دهی ریش</p>
-            <span>۳۰ دقیقه</span>
-        </div>
-
-        <div class="service">
-            <h3>مو و ریش</h3>
-            <p>اصلاح کامل مو و ریش</p>
-            <span>۶۰ دقیقه</span>
-        </div>
-
-        <div class="service">
-            <h3>فید (Fade)</h3>
-            <p>اصلاح مدرن و سایه‌زنی</p>
-            <span>۳۰ دقیقه</span>
-        </div>
-
+  <div class="service-grid">
+    <div class="service-card">
+      <div class="service-icon">✂</div>
+      <h3>اصلاح مو</h3>
+      <p>کوتاهی و استایل حرفه‌ای مو</p>
+      <strong>۳۰ دقیقه</strong>
     </div>
 
+    <div class="service-card">
+      <div class="service-icon">♛</div>
+      <h3>اصلاح ریش</h3>
+      <p>فرم‌دهی و مرتب‌سازی ریش</p>
+      <strong>۳۰ دقیقه</strong>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">★</div>
+      <h3>مو و ریش</h3>
+      <p>اصلاح کامل و استایل اختصاصی</p>
+      <strong>۶۰ دقیقه</strong>
+    </div>
+  </div>
 </section>
 
 <section class="booking" id="booking">
+  <div class="section-title">
+    <span>ONLINE BOOKING</span>
+    <h2>رزرو نوبت</h2>
+    <p>روز و ساعت دلخواهت رو انتخاب کن.</p>
+  </div>
 
-    <h2>رزرو نوبت آنلاین</h2>
+  <form id="bookingForm">
+    <label for="name">نام و نام خانوادگی</label>
+    <input id="name" type="text" placeholder="نام شما" required>
 
-    <form id="bookingForm">
+    <label for="phone">شماره موبایل</label>
+    <input id="phone" type="tel" placeholder="09xxxxxxxxx" required>
 
-        <label>نام و نام خانوادگی</label>
-        <input type="text" id="name" required
-        placeholder="نام شما">
+    <label for="service">انتخاب خدمت</label>
+    <select id="service" required>
+      <option value="">انتخاب کنید</option>
+      <option value="hair">اصلاح مو</option>
+      <option value="beard">اصلاح ریش</option>
+      <option value="both">مو و ریش</option>
+    </select>
 
-        <label>شماره موبایل</label>
-        <input type="tel" id="phone" required
-        placeholder="09123456789">
+    <label>انتخاب تاریخ شمسی</label>
+    <div id="persianCalendar" class="calendar"></div>
 
-        <label>انتخاب خدمات</label>
-        <select id="service" required>
-            <option value="">انتخاب کنید</option>
-            <option>کوتاهی مو</option>
-            <option>اصلاح ریش</option>
-            <option>مو و ریش</option>
-            <option>فید</option>
-        </select>
+    <input type="hidden" id="date" required>
 
-        <label>انتخاب تاریخ</label>
-        <input type="date" id="date" required>
+    <label for="time">انتخاب ساعت</label>
+    <select id="time" required>
+      <option value="">ابتدا تاریخ را انتخاب کنید</option>
+    </select>
 
-        <label>انتخاب ساعت</label>
-        <select id="time" required>
-            <option value="">انتخاب ساعت</option>
-        </select>
-
-        <button type="submit">
-            ثبت نوبت
-        </button>
-
-    </form>
+    <button type="submit" class="gold-btn submit-btn">
+      ثبت درخواست نوبت
+    </button>
 
     <p id="message"></p>
-
-</section>
-
-<section class="about" id="about">
-
-    <h2>درباره آرایشگاه ما</h2>
-
-    <p>
-        ما اینجا هستیم تا بهترین تجربه اصلاح
-        و آراستگی را برای شما فراهم کنیم.
-        کیفیت، دقت و رضایت مشتری اولویت ماست.
-    </p>
-
+  </form>
 </section>
 
 <footer>
-    <p>© 2026 BARBER - تمامی حقوق محفوظ است.</p>
+  <div class="logo">BARBER<span>.</span></div>
+  <p>تجربه‌ای متفاوت از استایل مردانه</p>
+  <small>© تمامی حقوق محفوظ است.</small>
 </footer>
 
 <script src="script.js"></script>
-
 </body>
 </html>
