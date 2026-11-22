@@ -1,9 +1,8 @@
 const form = document.getElementById("bookingForm");
+const calendar = document.getElementById("persianCalendar");
 const dateInput = document.getElementById("date");
 const timeSelect = document.getElementById("time");
 const message = document.getElementById("message");
-
-const calendar = document.getElementById("persianCalendar");
 
 const months = [
   "فروردین", "اردیبهشت", "خرداد",
@@ -13,279 +12,250 @@ const months = [
 ];
 
 const weekdays = [
-  "شنبه", "یکشنبه", "دوشنبه",
-  "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"
+  "ش", "ی", "د", "س", "چ", "پ", "ج"
 ];
 
-const services = {
-  hair: 30,
-  beard: 30,
-  both: 60
-};
-
 const today = new Date();
+const todayParts = new Intl.DateTimeFormat("en-US-u-ca-persian", {
+  year: "numeric",
+  month: "numeric",
+  day: "numeric"
+}).formatToParts(today);
 
-let selectedYear = today.getFullYear();
-let selectedMonth = today.getMonth();
+const currentYear = Number(todayParts.find(x => x.type === "year").value);
+const currentMonth = Number(todayParts.find(x => x.type === "month").value);
+const currentDay = Number(todayParts.find(x => x.type === "day").value);
 
-const selectedDate = new Date(
-  selectedYear,
-  selectedMonth,
-  today.getDate()
-);
+let viewYear = currentYear;
+let viewMonth = currentMonth;
+let selectedDate = null;
 
-let selectedPersianDate = null;
+function getPersianParts(date) {
+  const parts = new Intl.DateTimeFormat("en-US-u-ca-persian", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric"
+  }).formatToParts(date);
 
-// تبدیل تاریخ میلادی به شمسی
-function toJalali(gy, gm, gd) {
-  const gdm = [
-    0,31,59,90,120,151,181,
-    212,243,273,304,334
-  ];
-
-  let gy2 = gm > 2 ? gy + 1 : gy;
-
-  let days =
-    355666 +
-    365 * gy +
-    Math.floor((gy2 + 3) / 4) -
-    Math.floor((gy2 + 99) / 100) +
-    Math.floor((gy2 + 399) / 400) +
-    gd + gdm[gm - 1];
-
-  let jy = -1595 + 33 * Math.floor(days / 12053);
-  days %= 12053;
-
-  jy += 4 * Math.floor(days / 1461);
-  days %= 1461;
-
-  if (days > 365) {
-    jy += Math.floor((days - 1) / 365);
-    days = (days - 1) % 365;
-  }
-
-  let jm, jd;
-
-  if (days < 186) {
-    jm = 1 + Math.floor(days / 31);
-    jd = 1 + days % 31;
-  } else {
-    jm = 7 + Math.floor((days - 186) / 30);
-    jd = 1 + (days - 186) % 30;
-  }
-
-  return [jy, jm, jd];
+  return {
+    year: Number(parts.find(x => x.type === "year").value),
+    month: Number(parts.find(x => x.type === "month").value),
+    day: Number(parts.find(x => x.type === "day").value)
+  };
 }
 
-// تبدیل تاریخ شمسی به میلادی
-function toGregorian(jy, jm, jd) {
-  jy += 1595;
+function getPersianDate(year, month, day) {
+  // تبدیل تاریخ شمسی به میلادی با استفاده از تقویم فارسی مرورگر
+  const target = `${year}/${month}/${day}`;
 
-  let days =
-    -355668 +
-    365 * jy +
-    Math.floor(jy / 33) * 8 +
-    Math.floor(((jy % 33) + 3) / 4);
+  let low = Date.UTC(year + 621, 2, 19);
+  let high = Date.UTC(year + 622, 2, 22);
 
-  days += jm < 7
-    ? (jm - 1) * 31
-    : 186 + (jm - 7) * 30;
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
+    const date = new Date(mid);
+    const p = getPersianParts(date);
 
-  days += jd - 1;
+    const current = p.year * 10000 + p.month * 100 + p.day;
+    const wanted = year * 10000 + month * 100 + day;
 
-  let gy = 400 * Math.floor(days / 146097);
-  days %= 146097;
+    if (current === wanted) {
+      return new Date(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate()
+      );
+    }
 
-  if (days > 36524) {
-    gy += 100 * Math.floor(--days / 36524);
-    days %= 36524;
-
-    if (days >= 365) days++;
+    if (current < wanted) low = mid + 1;
+    else high = mid - 1;
   }
 
-  gy += 4 * Math.floor(days / 1461);
-  days %= 1461;
-
-  if (days > 365) {
-    gy += Math.floor((days - 1) / 365);
-    days = (days - 1) % 365;
-  }
-
-  let gd = days + 1;
-  const leap =
-    gy % 4 === 0 &&
-    (gy % 100 !== 0 || gy % 400 === 0);
-
-  const monthDays = [
-    0,31,leap ? 29 : 28,31,30,31,
-    30,31,31,30,31,30,31
-  ];
-
-  let gm = 1;
-
-  while (gm <= 12 && gd > monthDays[gm]) {
-    gd -= monthDays[gm];
-    gm++;
-  }
-
-  return new Date(gy, gm - 1, gd);
+  return null;
 }
 
-function dateKey(date) {
-  return [
-    date.getFullYear(),
-    String(date.getMonth() + 1).padStart(2, "0"),
-    String(date.getDate()).padStart(2, "0")
-  ].join("-");
+function getMonthLength(year, month) {
+  if (month <= 6) return 31;
+  if (month <= 11) return 30;
+
+  const last = getPersianDate(year, 12, 30);
+  return last ? 30 : 29;
 }
 
 function renderCalendar() {
-  const firstDay = new Date(
-    selectedYear, selectedMonth, 1
-  );
+  calendar.innerHTML = "";
 
-  const lastDay = new Date(
-    selectedYear, selectedMonth + 1, 0
-  );
+  const header = document.createElement("div");
+  header.className = "calendar-header";
 
-  const firstWeekday = (firstDay.getDay() + 1) % 7;
+  const title = document.createElement("strong");
+  title.textContent = `${months[viewMonth - 1]} ${viewYear}`;
 
-  const currentJalali = toJalali(
-    selectedYear,
-    selectedMonth + 1,
-    1
-  );
+  const prev = document.createElement("button");
+  prev.textContent = "‹";
+  prev.onclick = () => changeMonth(-1);
 
-  const jy = currentJalali[0];
-  const jm = currentJalali[1];
+  const next = document.createElement("button");
+  next.textContent = "›";
+  next.onclick = () => changeMonth(1);
 
-  const jalaliMonthLength = jm <= 6 ? 31 : jm <= 11 ? 30 : 29;
+  header.append(prev, title, next);
+  calendar.appendChild(header);
 
-  let html = `
-    <div class="calendar-header">
-      <button type="button" id="prevMonth">ماه قبل</button>
-      <strong>${months[jm - 1]} ${jy}</strong>
-      <button type="button" id="nextMonth">ماه بعد</button>
-    </div>
-    <div class="calendar-grid">
-  `;
+  const grid = document.createElement("div");
+  grid.className = "calendar-grid";
 
   weekdays.forEach(day => {
-    html += `<div class="day-name">${day}</div>`;
+    const cell = document.createElement("div");
+    cell.className = "day-name";
+    cell.textContent = day;
+    grid.appendChild(cell);
   });
 
-  for (let i = 0; i < firstWeekday; i++) {
-    html += `<div></div>`;
+  const firstDate = getPersianDate(viewYear, viewMonth, 1);
+  const offset = firstDate ? (firstDate.getDay() + 1) % 7 : 0;
+  const length = getMonthLength(viewYear, viewMonth);
+
+  for (let i = 0; i < offset; i++) {
+    grid.appendChild(document.createElement("div"));
   }
 
-  for (let day = 1; day <= lastDay.getDate(); day++) {
-    const date = new Date(selectedYear, selectedMonth, day);
-    const weekday = date.getDay();
+  for (let day = 1; day <= length; day++) {
+    const cell = document.createElement("div");
+    cell.className = "day";
+    cell.textContent = day;
 
-    const isFriday = weekday === 5;
-    const isPast = dateKey(date) < dateKey(today);
+    const date = getPersianDate(viewYear, viewMonth, day);
 
-    const jDate = toJalali(
-      selectedYear,
-      selectedMonth + 1,
-      day
-    );
+    if (!date) {
+      cell.classList.add("disabled");
+      grid.appendChild(cell);
+      continue;
+    }
 
-    const disabled = isFriday || isPast;
+    const p = getPersianParts(date);
+    const isPast =
+      p.year < currentYear ||
+      (p.year === currentYear && p.month < currentMonth) ||
+      (p.year === currentYear && p.month === currentMonth && p.day < currentDay);
 
-    const isSelected =
-      selectedPersianDate === dateKey(date);
+    const isFriday = date.getDay() === 5;
 
-    html += `
-      <div class="day ${disabled ? "disabled" : ""} ${isFriday ? "friday" : ""} ${isSelected ? "selected" : ""}"
-        data-date="${dateKey(date)}">
-        ${jDate[2]}
-      </div>
-    `;
+    if (isPast || isFriday) {
+      cell.classList.add("disabled");
+      if (isFriday) cell.classList.add("friday");
+    } else {
+      cell.onclick = () => selectDate(date, cell);
+    }
+
+    if (
+      selectedDate &&
+      selectedDate.toDateString() === date.toDateString()
+    ) {
+      cell.classList.add("selected");
+    }
+
+    grid.appendChild(cell);
   }
 
-  html += `</div>`;
-
-  calendar.innerHTML = html;
-
-  document.getElementById("prevMonth").onclick = () => {
-    selectedMonth--;
-
-    if (selectedMonth < 0) {
-      selectedMonth = 11;
-      selectedYear--;
-    }
-
-    renderCalendar();
-  };
-
-  document.getElementById("nextMonth").onclick = () => {
-    selectedMonth++;
-
-    if (selectedMonth > 11) {
-      selectedMonth = 0;
-      selectedYear++;
-    }
-
-    renderCalendar();
-  };
-
-  calendar.querySelectorAll(".day:not(.disabled)").forEach(el => {
-    el.onclick = () => {
-      selectedPersianDate = el.dataset.date;
-      dateInput.value = selectedPersianDate;
-
-      const [gy, gm, gd] = selectedPersianDate
-        .split("-").map(Number);
-
-      const jalali = toJalali(gy, gm, gd);
-
-      document.querySelectorAll(".day").forEach(d =>
-        d.classList.remove("selected")
-      );
-
-      el.classList.add("selected");
-
-      loadTimes(new Date(gy, gm - 1, gd));
-    };
-  });
+  calendar.appendChild(grid);
 }
 
-function loadTimes(date) {
+function changeMonth(amount) {
+  viewMonth += amount;
+
+  if (viewMonth > 12) {
+    viewMonth = 1;
+    viewYear++;
+  }
+
+  if (viewMonth < 1) {
+    viewMonth = 12;
+    viewYear--;
+  }
+
+  if (
+    viewYear < currentYear ||
+    (viewYear === currentYear && viewMonth < currentMonth)
+  ) {
+    viewYear = currentYear;
+    viewMonth = currentMonth;
+  }
+
+  renderCalendar();
+}
+
+function selectDate(date, cell) {
+  selectedDate = date;
+
+  const p = getPersianParts(date);
+
+  dateInput.value =
+    `${p.year}/${String(p.month).padStart(2, "0")}/${String(p.day).padStart(2, "0")}`;
+
+  renderCalendar();
+  loadTimes();
+}
+
+function loadTimes() {
   timeSelect.innerHTML = '<option value="">انتخاب ساعت</option>';
+
+  if (!selectedDate) return;
+
+  const service = document.getElementById("service").value;
+  const duration = service === "both" ? 60 : 30;
+
+  if (!service) {
+    timeSelect.innerHTML = '<option value="">ابتدا خدمت را انتخاب کنید</option>';
+    return;
+  }
+
+  const bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
 
   for (let hour = 10; hour < 22; hour++) {
     for (let minute of [0, 30]) {
-      const start = new Date(date);
-      start.setHours(hour, minute, 0, 0);
+      const start = hour * 60 + minute;
 
-      const end = new Date(start);
-      end.setMinutes(end.getMinutes() + 30);
+      if (start + duration > 22 * 60) continue;
 
-      const label =
-        String(hour).padStart(2, "0") + ":" +
-        String(minute).padStart(2, "0");
+      const dateKey = selectedDate.toISOString().slice(0, 10);
+
+      const busy = bookings.some(b => {
+        if (b.date !== dateKey) return false;
+
+        const [h, m] = b.time.split(":").map(Number);
+        const oldStart = h * 60 + m;
+        const oldEnd = oldStart + b.duration;
+
+        return start < oldEnd && start + duration > oldStart;
+      });
+
+      if (busy) continue;
 
       const option = document.createElement("option");
-      option.value = label;
-      option.textContent = label;
+      option.value =
+        `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+
+      option.textContent =
+        `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
 
       timeSelect.appendChild(option);
     }
   }
 }
 
-form.addEventListener("submit", function(e) {
-  e.preventDefault();
+document.getElementById("service").addEventListener("change", loadTimes);
+
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
 
   const name = document.getElementById("name").value.trim();
   const phone = document.getElementById("phone").value.trim();
   const service = document.getElementById("service").value;
-  const date = dateInput.value;
   const time = timeSelect.value;
 
-  if (!date || !time || !service) {
-    message.textContent = "لطفاً تاریخ، ساعت و خدمت را انتخاب کنید.";
+  if (!selectedDate || !time || !service || !name || !phone) {
+    message.textContent = "لطفاً همه اطلاعات را کامل کنید.";
     return;
   }
 
@@ -294,63 +264,49 @@ form.addEventListener("submit", function(e) {
     return;
   }
 
-  const bookings = JSON.parse(
-    localStorage.getItem("barberBookings") || "[]"
-  );
+  const duration = service === "both" ? 60 : 30;
+  const dateKey = selectedDate.toISOString().slice(0, 10);
 
-  const duration = services[service];
+  const bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
 
-  const [gy, gm, gd] = date.split("-").map(Number);
-
-  const start = new Date(gy, gm - 1, gd);
   const [hour, minute] = time.split(":").map(Number);
+  const start = hour * 60 + minute;
 
-  start.setHours(hour, minute, 0, 0);
+  const conflict = bookings.some(b => {
+    if (b.date !== dateKey) return false;
 
-  const end = new Date(start);
-  end.setMinutes(end.getMinutes() + duration);
+    const [h, m] = b.time.split(":").map(Number);
+    const oldStart = h * 60 + m;
 
-  const conflict = bookings.some(booking => {
-    if (booking.date !== date) return false;
-
-    const [bh, bm] = booking.time.split(":").map(Number);
-    const bookingStart = new Date(start);
-    bookingStart.setHours(bh, bm, 0, 0);
-
-    const bookingEnd = new Date(bookingStart);
-    bookingEnd.setMinutes(
-      bookingEnd.getMinutes() + booking.duration
-    );
-
-    return start < bookingEnd && end > bookingStart;
+    return start < oldStart + b.duration &&
+           start + duration > oldStart;
   });
 
   if (conflict) {
     message.textContent = "این ساعت قبلاً رزرو شده است.";
+    loadTimes();
     return;
   }
 
-  bookings.push({
+  const booking = {
     name,
     phone,
     service,
-    date,
+    date: dateKey,
+    persianDate: dateInput.value,
     time,
     duration
-  });
+  };
 
-  localStorage.setItem(
-    "barberBookings",
-    JSON.stringify(bookings)
-  );
+  bookings.push(booking);
+  localStorage.setItem("bookings", JSON.stringify(bookings));
 
   message.textContent = "درخواست نوبت با موفقیت ثبت شد ✨";
 
   form.reset();
+  selectedDate = null;
   dateInput.value = "";
-  selectedPersianDate = null;
   timeSelect.innerHTML = '<option value="">ابتدا تاریخ را انتخاب کنید</option>';
-
   renderCalendar();
 });
 
