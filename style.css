@@ -1,250 +1,372 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --black: #090909;
+  --card: #151515;
+  --gold: #d6ad60;
+  --gold-light: #f3d18b;
+  --white: #f5f2ec;
+  --gray: #a5a5a5;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  }
+}
 
 html {
-scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 body {
-font-family: Tahoma, sans-serif;
-background: #080808;
-color: white;
-direction: rtl;
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Vazirmatn', sans-serif;
+  line-height: 1.8;
 }
 
-header {
-background: #111;
-padding: 22px 8%;
-display: flex;
-justify-content: space-between;
-align-items: center;
-border-bottom: 1px solid #333;
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.navbar {
+  height: 85px;
+  padding: 0 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(9,9,9,.96);
+  border-bottom: 1px solid rgba(214,173,96,.2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .logo {
-font-size: 27px;
-font-weight: bold;
-letter-spacing: 3px;
+  font-size: 27px;
+  font-weight: 900;
+  letter-spacing: 2px;
 }
 
-nav {
-display: flex;
-gap: 25px;
+.logo span {
+  color: var(--gold);
 }
 
-nav a {
-color: white;
-text-decoration: none;
-font-size: 14px;
-transition: 0.3s;
+.navbar nav {
+  display: flex;
+  gap: 35px;
 }
 
-nav a:hover {
-color: #999;
+.navbar nav a {
+  color: #ddd;
+  transition: .3s;
+}
+
+.navbar nav a:hover {
+  color: var(--gold);
+}
+
+.nav-btn {
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 8px 22px;
+  border-radius: 30px;
+  transition: .3s;
+}
+
+.nav-btn:hover {
+  background: var(--gold);
+  color: #111;
 }
 
 .hero {
-min-height: 550px;
-display: flex;
-align-items: center;
-padding: 70px 10%;
-background: linear-gradient(90deg, #080808, #222);
+  min-height: 610px;
+  display: flex;
+  align-items: center;
+  padding: 80px 10%;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.88), rgba(0,0,0,.35)),
+    url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1800')
+    center/cover no-repeat;
 }
 
-.hero-content h1 {
-font-size: 65px;
-line-height: 1.7;
-margin-bottom: 15px;
+.hero-content {
+  max-width: 650px;
 }
 
-.hero-content p {
-color: #aaa;
-font-size: 17px;
-margin-bottom: 35px;
+.eyebrow,
+.section-title span {
+  color: var(--gold);
+  letter-spacing: 3px;
+  font-size: 13px;
 }
 
-.btn {
-display: inline-block;
-background: white;
-color: black;
-padding: 15px 35px;
-text-decoration: none;
-font-weight: bold;
-transition: 0.3s;
+.hero h1 {
+  font-size: clamp(42px, 7vw, 76px);
+  line-height: 1.4;
+  margin: 18px 0;
+  font-weight: 900;
 }
 
-.btn:hover {
-background: #aaa;
-transform: translateY(-3px);
+.hero h1 span {
+  color: var(--gold);
 }
 
-.services {
-padding: 80px 8%;
-text-align: center;
+.hero p {
+  color: #ccc;
+  font-size: 17px;
+  margin-bottom: 30px;
 }
 
-.services h2,
-.booking h2,
-.about h2 {
-font-size: 35px;
-margin-bottom: 45px;
+.gold-btn {
+  display: inline-block;
+  border: none;
+  background: linear-gradient(135deg, var(--gold-light), #b8893d);
+  color: #111;
+  padding: 13px 35px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .3s;
 }
 
-.service-container {
-display: grid;
-grid-template-columns: repeat(4, 1fr);
-gap: 20px;
+.gold-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(214,173,96,.25);
 }
 
-.service {
-background: #151515;
-border: 1px solid #333;
-padding: 35px 15px;
-transition: 0.3s;
+.services,
+.booking {
+  padding: 90px 8%;
 }
 
-.service:hover {
-background: #252525;
-transform: translateY(-8px);
+.section-title {
+  text-align: center;
+  margin-bottom: 45px;
 }
 
-.service h3 {
-font-size: 20px;
-margin-bottom: 15px;
+.section-title h2 {
+  font-size: 34px;
+  margin: 8px 0;
 }
 
-.service p {
-color: #aaa;
-font-size: 13px;
-margin-bottom: 20px;
+.section-title p {
+  color: var(--gray);
 }
 
-.service span {
-color: white;
-font-size: 13px;
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.service-card {
+  text-align: center;
+  padding: 38px 25px;
+  background: linear-gradient(145deg, #191919, #101010);
+  border: 1px solid #29251d;
+  border-radius: 15px;
+  transition: .35s;
+}
+
+.service-card:hover {
+  transform: translateY(-9px);
+  border-color: var(--gold);
+  box-shadow: 0 12px 35px rgba(214,173,96,.09);
+}
+
+.service-icon {
+  font-size: 38px;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.service-card h3 {
+  font-size: 21px;
+  margin-bottom: 8px;
+}
+
+.service-card p {
+  color: var(--gray);
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.service-card strong {
+  color: var(--gold);
 }
 
 .booking {
-padding: 80px 20px;
-background: #151515;
-text-align: center;
+  background: #101010;
 }
 
-form {
-max-width: 500px;
-margin: auto;
-display: flex;
-flex-direction: column;
-gap: 12px;
-text-align: right;
+.booking form {
+  max-width: 560px;
+  margin: auto;
+  padding: 35px;
+  background: #171717;
+  border: 1px solid #302819;
+  border-radius: 16px;
 }
 
-form label {
-font-size: 14px;
+.booking label {
+  display: block;
+  margin: 18px 0 7px;
+  color: var(--gold-light);
+  font-size: 14px;
 }
 
-form input,
-form select {
-padding: 15px;
-background: #222;
-border: 1px solid #444;
-color: white;
-font-size: 14px;
-outline: none;
+.booking input,
+.booking select {
+  width: 100%;
+  padding: 13px;
+  background: #0d0d0d;
+  border: 1px solid #383838;
+  color: white;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
 }
 
-form input:focus,
-form select:focus {
-border-color: white;
+.booking input:focus,
+.booking select:focus {
+  border-color: var(--gold);
 }
 
-form button {
-padding: 16px;
-margin-top: 15px;
-background: white;
-color: black;
-border: none;
-font-size: 16px;
-font-weight: bold;
-cursor: pointer;
-transition: 0.3s;
-}
-
-form button:hover {
-background: #aaa;
+.submit-btn {
+  width: 100%;
+  margin-top: 25px;
+  font-size: 16px;
 }
 
 #message {
-margin-top: 20px;
-color: white;
+  text-align: center;
+  margin-top: 15px;
+  color: var(--gold);
 }
 
-.about {
-padding: 90px 10%;
-text-align: center;
+.calendar {
+  background: #0d0d0d;
+  border: 1px solid #383024;
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 8px;
 }
 
-.about p {
-max-width: 650px;
-margin: auto;
-color: #aaa;
-line-height: 2.5;
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.calendar-header button {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid #66512f;
+  border-radius: 7px;
+  padding: 5px 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  text-align: center;
+}
+
+.calendar-grid div {
+  padding: 8px 2px;
+  font-size: 13px;
+}
+
+.calendar-grid .day-name {
+  color: var(--gold);
+  font-weight: bold;
+}
+
+.calendar-grid .day {
+  background: #1a1a1a;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.calendar-grid .day:hover {
+  background: #493a22;
+}
+
+.calendar-grid .day.selected {
+  background: var(--gold);
+  color: #111;
+  font-weight: bold;
+}
+
+.calendar-grid .day.disabled {
+  opacity: .25;
+  cursor: not-allowed;
+}
+
+.calendar-grid .day.friday {
+  color: #d66b6b;
+  cursor: not-allowed;
 }
 
 footer {
-background: #111;
-padding: 25px;
-text-align: center;
-color: #888;
-font-size: 13px;
-border-top: 1px solid #333;
+  text-align: center;
+  padding: 40px 20px;
+  border-top: 1px solid #302819;
+  color: var(--gray);
 }
 
-/* Mobile Responsive */
-
-@media (max-width: 768px) {
-
-header {
-    flex-direction: column;
-    gap: 20px;
+footer .logo {
+  color: white;
+  margin-bottom: 8px;
 }
 
-nav {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
+footer small {
+  display: block;
+  margin-top: 15px;
 }
 
-.hero {
-    min-height: 420px;
+@media(max-width: 750px) {
+  .navbar {
+    padding: 0 5%;
+    height: 70px;
+  }
+
+  .navbar nav {
+    gap: 12px;
+    font-size: 12px;
+  }
+
+  .nav-btn {
+    display: none;
+  }
+
+  .hero {
+    min-height: 520px;
     padding: 50px 7%;
-}
+    background-position: 60% center;
+  }
 
-.hero-content h1 {
-    font-size: 42px;
-}
+  .service-grid {
+    grid-template-columns: 1fr;
+  }
 
-.hero-content p {
-    font-size: 14px;
-}
+  .services,
+  .booking {
+    padding: 65px 6%;
+  }
 
-.service-container {
-    grid-template-columns: repeat(2, 1fr);
-}
-
-.services h2,
-.booking h2,
-.about h2 {
-    font-size: 27px;
-}
-
-}
-
-@media (max-width: 400px) {
-.service-container {
-grid-template-columns: 1fr;
-}
+  .booking form {
+    padding: 22px 16px;
+  }
 }
