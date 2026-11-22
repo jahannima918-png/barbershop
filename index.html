@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BARBER | آرایشگاه مردانه</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">BARBER.</div>
+
+    <nav>
+        <a href="#home">صفحه اصلی</a>
+        <a href="#services">خدمات</a>
+        <a href="#booking">رزرو نوبت</a>
+        <a href="#about">درباره ما</a>
+    </nav>
+</header>
+
+<section class="hero" id="home">
+
+    <div class="hero-content">
+        <h1>استایل تو،<br>امضای توست.</h1>
+
+        <p>
+            تجربه یک اصلاح حرفه‌ای و متفاوت
+            در آرایشگاه مردانه ما
+        </p>
+
+        <a href="#booking" class="btn">
+            رزرو نوبت آنلاین
+        </a>
+    </div>
+
+</section>
+
+<section class="services" id="services">
+
+    <h2>خدمات ما</h2>
+
+    <div class="service-container">
+
+        <div class="service">
+            <h3>کوتاهی مو</h3>
+            <p>اصلاح و فرم‌دهی حرفه‌ای</p>
+            <span>۳۰ دقیقه</span>
+        </div>
+
+        <div class="service">
+            <h3>اصلاح ریش</h3>
+            <p>مرتب‌سازی و فرم‌دهی ریش</p>
+            <span>۳۰ دقیقه</span>
+        </div>
+
+        <div class="service">
+            <h3>مو و ریش</h3>
+            <p>اصلاح کامل مو و ریش</p>
+            <span>۶۰ دقیقه</span>
+        </div>
+
+        <div class="service">
+            <h3>فید (Fade)</h3>
+            <p>اصلاح مدرن و سایه‌زنی</p>
+            <span>۳۰ دقیقه</span>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="booking" id="booking">
+
+    <h2>رزرو نوبت آنلاین</h2>
+
+    <form id="bookingForm">
+
+        <label>نام و نام خانوادگی</label>
+        <input type="text" id="name" required
+        placeholder="نام شما">
+
+        <label>شماره موبایل</label>
+        <input type="tel" id="phone" required
+        placeholder="09123456789">
+
+        <label>انتخاب خدمات</label>
+        <select id="service" required>
+            <option value="">انتخاب کنید</option>
+            <option>کوتاهی مو</option>
+            <option>اصلاح ریش</option>
+            <option>مو و ریش</option>
+            <option>فید</option>
+        </select>
+
+        <label>انتخاب تاریخ</label>
+        <input type="date" id="date" required>
+
+        <label>انتخاب ساعت</label>
+        <select id="time" required>
+            <option value="">انتخاب ساعت</option>
+        </select>
+
+        <button type="submit">
+            ثبت نوبت
+        </button>
+
+    </form>
+
+    <p id="message"></p>
+
+</section>
+
+<section class="about" id="about">
+
+    <h2>درباره آرایشگاه ما</h2>
+
+    <p>
+        ما اینجا هستیم تا بهترین تجربه اصلاح
+        و آراستگی را برای شما فراهم کنیم.
+        کیفیت، دقت و رضایت مشتری اولویت ماست.
+    </p>
+
+</section>
+
+<footer>
+    <p>© 2026 BARBER - تمامی حقوق محفوظ است.</p>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
